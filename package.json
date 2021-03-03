@@ -1,0 +1,40 @@
+{
+  "name": "patre-eth",
+  "version": "1.0.0",
+  "description": "An application that allows for similar functionality to patreon.",
+  "main": "server.js",
+  "scripts": {
+    "run": "node server.js",
+    "test": "mocha **/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnminerIv/patre-eth.git"
+  },
+  "keywords": [
+    "patreon",
+    "patre-eth",
+    "ethereum",
+    "blockchain"
+  ],
+  "author": "John Miner",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/JohnminerIv/patre-eth/issues"
+  },
+  "homepage": "https://github.com/JohnminerIv/patre-eth#readme",
+  "dependencies": {
+    "babel-cli": "^6.18.0",
+    "bcryptjs": "^2.4.3",
+    "chai": "^4.3.3",
+    "chai-http": "^4.3.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.1",
+    "express-validator": "^6.10.0",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^8.3.0",
+    "mongoose": "^5.11.18"
+  }
+}
