@@ -21,7 +21,7 @@ const user = {
   publicEthAddress: '0xa257767e48462AF52C67F1CE0BdD72001da35190',
 };
 
-describe('Route /user/create', function () {
+describe('User routes', function () {
   it('Should get the form to create users', function (done) {
     agent
       .get('/user/create')
