@@ -1,3 +1,9 @@
+# vscode
+.vscode
+
+# linting
+.eslintrc.js
+
 # Logs
 logs
 *.log
