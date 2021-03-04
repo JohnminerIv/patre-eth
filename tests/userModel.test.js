@@ -5,7 +5,6 @@
 /* eslint-disable no-underscore-dangle */
 require('mocha');
 const chai = require('chai');
-// const mongoose = require('mongoose');
 const User = require('../models/user');
 const connection = require('../data/patre-eth-db');
 

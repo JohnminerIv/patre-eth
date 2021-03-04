@@ -12,10 +12,12 @@ mongoose.connect(
   },
   (err /* , _db */) => {
     assert.strictEqual(null, err);
+    // eslint-disable-next-line no-console
     console.log('Connected successfully to database');
     // _db.close(); // turn on for testing
   },
 );
+// eslint-disable-next-line no-console
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection Error:'));
 mongoose.set('debug', true);
 module.exports = mongoose.connection;

@@ -19,4 +19,6 @@ Which means we should first write tests for our models and databases.
 * set up database js file
 * write user model
 * run tests / debug
---now commit-- 
+--now commit--
+* write tests for homepage.
+* write homepage route
