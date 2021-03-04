@@ -11,3 +11,12 @@ As such, we will create routs and pages in this order:
 4. user logout at /user/:id/logout
 5. user update at /user/:id/update
 6. user delete at /user/:id/delete
+
+Which means we should first write tests for our models and databases.
+
+--Check list--
+* User Model Tests
+* set up database js file
+* write user model
+* run tests / debug
+--now commit-- 

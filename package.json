@@ -36,5 +36,10 @@
     "jsonwebtoken": "^8.5.1",
     "mocha": "^8.3.0",
     "mongoose": "^5.11.18"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
   }
 }
