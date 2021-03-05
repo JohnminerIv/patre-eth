@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const ethAddressValidator = require('../utils/ethAddressValidator');
+const { render } = require('../server');
 // const { findByIdAndDelete } = require('../models/user');
 
 module.exports = (app) => {
@@ -25,6 +26,7 @@ module.exports = (app) => {
     (req, res) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        // eslint-disable-next-line no-console
         console.log(errors);
         return res.status(400).render('bruh');
       }
@@ -32,7 +34,6 @@ module.exports = (app) => {
         .findOne({ username: req.body.username })
         // eslint-disable-next-line consistent-return
         .then((foundUser) => {
-          console.log(foundUser);
           if (foundUser === null) {
             const user = User({
               username: req.body.username,
@@ -54,7 +55,6 @@ module.exports = (app) => {
                 return res.status(400).render('bruh');
               });
           } else {
-            console.log('Name taken');
             return res.render('userCreate', { message: 'Username taken' });
           }
         })
@@ -64,6 +64,58 @@ module.exports = (app) => {
         });
     },
   );
+  app.get(
+    '/user',
+    (req, res) => {
+      if (req.user === null) {
+        return res.redirect('/');
+      }
+      return res.render('user', { user: req.user });
+    },
+  );
+  app.get(
+    '/user/update',
+    (req, res) => {
+      if (req.user === null) {
+        return res.redirect('/');
+      }
+      return res.render('userUpdate');
+    },
+  );
+  app.update(
+    '/user/update',
+    // eslint-disable-next-line consistent-return
+    (req, res) => {
+      if (req.user === null) {
+        return res.redirect('/');
+      }
+      User
+        // eslint-disable-next-line no-underscore-dangle
+        .findOneAndUpdate({ _id: req.user._id }, {
+          username: req.body.username,
+          password: req.body.password,
+          email: req.body.email,
+          publicEthAddress: req.body.publicEthAddress,
+        })
+        .then(() => render('user'))
+        // eslint-disable-next-line no-console
+        .catch((err) => console.log(err));
+    },
+  );
+  app.delete(
+    '/user/delete',
+    (req, res) => {
+      User
+        // eslint-disable-next-line no-underscore-dangle
+        .findByIdAndDelete(req.user._id, (err) => {
+          res.clearCookie('nToken');
+          // eslint-disable-next-line no-console
+          console.log(err);
+          return res.redirect('/');
+        });
+    },
+  );
+
   app.get(
     '/user/login',
     (req, res) => {
@@ -96,18 +148,6 @@ module.exports = (app) => {
     (req, res) => {
       res.clearCookie('nToken');
       res.redirect('/');
-    },
-  );
-  app.delete(
-    '/user/delete',
-    (req, res) => {
-      User
-        .findByIdAndDelete(req.user._id, (err) => {
-          res.clearCookie('nToken');
-          // eslint-disable-next-line no-console
-          console.log(err);
-          return res.redirect('/');
-        });
     },
   );
 };
