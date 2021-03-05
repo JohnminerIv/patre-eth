@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const ethAddressValidator = require('../utils/ethAddressValidator');
-const { render } = require('../server');
 // const { findByIdAndDelete } = require('../models/user');
 
 module.exports = (app) => {
@@ -82,7 +81,7 @@ module.exports = (app) => {
       return res.render('userUpdate');
     },
   );
-  app.update(
+  app.put(
     '/user/update',
     // eslint-disable-next-line consistent-return
     (req, res) => {
@@ -97,7 +96,7 @@ module.exports = (app) => {
           email: req.body.email,
           publicEthAddress: req.body.publicEthAddress,
         })
-        .then(() => render('user'))
+        .then(() => res.render('user'))
         // eslint-disable-next-line no-console
         .catch((err) => console.log(err));
     },
