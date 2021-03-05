@@ -12,6 +12,14 @@ As such, we will create routs and pages in this order:
 5. user update at /user/:id/update
 6. user delete at /user/:id/delete
 
+`/` GET
+`/user` GET
+`/user/create` GET
+`/user/create` POST
+`/user/update` GET
+`/user/update` PUT
+
+
 Which means we should first write tests for our models and databases.
 
 --Check list--
@@ -19,7 +27,10 @@ Which means we should first write tests for our models and databases.
 * set up database js file
 * write user model
 * run tests / debug\n
---now commit--
 * write tests for homepage.
-* write homepage route
+* write homepage route.
 * wrote tests for user routes.
+* wrote the user update route.
+* wrote content model tests
+* wrote the content model
+* write the content route tests
