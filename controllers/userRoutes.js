@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const ethAddressValidator = require('../utils/ethAddressValidator');
-// const { findByIdAndDelete } = require('../models/user');
 
 module.exports = (app) => {
   app.get(
@@ -133,10 +132,16 @@ module.exports = (app) => {
         User
           .findOne({ username: req.body.username })
           .then((foundUser) => {
-            // eslint-disable-next-line no-underscore-dangle
-            const token = jwt.sign({ _id: foundUser._id }, process.env.SECRET, { expiresIn: '60 days' });
-            res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
-            return res.redirect('/');
+            foundUser.comparePassword(req.body.password, (err, isMatch) => {
+              if (!isMatch) {
+                // Password does not match
+                return res.status(401).send({ message: 'Wrong Username or password' });
+              }
+              // eslint-disable-next-line no-underscore-dangle
+              const token = jwt.sign({ _id: foundUser._id }, process.env.SECRET, { expiresIn: '60 days' });
+              res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
+              return res.redirect('/');
+            });
           });
       }
       return res.status(404).render('bruh');
