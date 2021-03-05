@@ -32,12 +32,9 @@ describe('User model', function () {
             })
             .then(function () {
               User
-                .findOneAndDelete(user)
-                .then(function () {
-                  done();
-                })
-                .catch(function (err) {
+                .deleteMany({ username: 'test1' }, function (err) {
                   console.log(err);
+                  console.log('del user');
                   done();
                 });
             })
@@ -54,6 +51,7 @@ describe('User model', function () {
 });
 
 after(function (done) {
+  console.log('Closing connection');
   connection.close();
   done();
 });

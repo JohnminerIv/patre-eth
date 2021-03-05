@@ -10,13 +10,13 @@ const server = require('../server');
 const User = require('../models/user');
 const connection = require('../data/patre-eth-db');
 
-// const should = chai.should();
 chai.use(chaiHttp);
+const should = chai.should();
 const agent = chai.request.agent(server);
 
 const user = {
   username: 'test1',
-  password: 'test1',
+  password: 'Unl1m1t3dBr41nUlt1m4t3P455w0rd!',
   email: 'john.fakey.email@gmail.com',
   publicEthAddress: '0xa257767e48462AF52C67F1CE0BdD72001da35190',
 };
@@ -29,54 +29,53 @@ describe('User routes', function () {
         should.not.exist(err);
         res.status.should.be.equal(200);
         done();
-      })
-      .catch(function (err) {
-        console.log(err);
-        done();
       });
   });
   it('Should allow users to be created', function (done) {
+    User.deleteMany({ username: 'test1' }, function () {
+      agent
+        .post('/user/create')
+        .send(user)
+        .end(function (err, res) {
+          res.status.should.be.equal(200);
+          agent.should.have.cookie('nToken');
+          done();
+        });
+    });
+  });
+  it('Should get an update form', function (done) {
     agent
-      .post('/user/create')
-      .send(user)
-      .then(function (res) {
+      .get('/user/update')
+      .end(function (err, res) {
+        should.not.exist(err);
         res.status.should.be.equal(200);
-        done();
-      })
-      .catch(function (err) {
-        console.log(err);
         done();
       });
   });
   it('Should allow users to be updated', function (done) {
     user.email = 'a.different.email@gmail.com';
     agent
-      .put('/user/create')
+      .put('/user/update')
       .send(user)
-      .then(function (res) {
+      .end(function (err, res) {
         res.status.should.be.equal(200);
-        done();
-      })
-      .catch(function (err) {
-        console.log(err);
         done();
       });
   });
   it('Should allow users to be deleted', function (done) {
     User.findOne({ username: 'test1' })
       .then(function (foundUser) {
+        if (foundUser === null) {
+          throw new Error('user not found');
+        }
         agent
-          .delete(`user/${foundUser._id}/delete`)
-          .then(function (res) {
+          .delete('/user/delete')
+          .end(function (err, res) {
             res.status.should.be.equal(200);
             User
-              .findById(foundUser)
+              .findById(foundUser._id)
               .then(function (doc) {
-                doc.should.not.exist();
-                done();
-              })
-              .catch(function (err) {
-                console.log(err);
+                should.not.exist(doc);
                 done();
               });
           });
@@ -85,6 +84,7 @@ describe('User routes', function () {
 });
 
 after(function (done) {
+  console.log('Closing connection');
   connection.close();
   done();
 });

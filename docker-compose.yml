@@ -13,7 +13,7 @@ services:
   web:
     build: .
     command: ["npm", "test"]
-    # command: ["npm", "run"]
+    # command: ["npm", "start"]
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${ROOTUSER}
       MONGO_INITDB_ROOT_PASSWORD: ${ROOTPASS}

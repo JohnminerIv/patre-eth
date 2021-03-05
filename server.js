@@ -34,6 +34,7 @@ const checkAuth = (req, _res, next) => {
     const token = req.cookies.nToken;
     const decodedToken = jwt.decode(token, { complete: true }) || {};
     req.user = decodedToken.payload;
+    console.log(req.user);
   }
   next();
 };
@@ -45,6 +46,8 @@ app.get('/', (req, res) => {
   const currentUser = req.user;
   res.render('index', { currentUser });
 });
+
+require('./controllers/userRoutes.js')(app);
 
 // Start Server
 
