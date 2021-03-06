@@ -22,6 +22,9 @@ module.exports = (app) => {
     body('publicEthAddress').custom(ethAddressValidator),
     // eslint-disable-next-line consistent-return
     (req, res) => {
+      if (!req.user === null) {
+        return res.status(401).send({ message: 'Not Authorised' });
+      }
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         // eslint-disable-next-line no-console
@@ -113,7 +116,6 @@ module.exports = (app) => {
         });
     },
   );
-
   app.get(
     '/user/login',
     (req, res) => {
