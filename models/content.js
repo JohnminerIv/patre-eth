@@ -15,6 +15,7 @@ const ContentSchema = new Schema({
 
 ContentSchema
   .pre('findOne', Populate('author'))
-  .pre('find', Populate('author'));
+  .pre('find', Populate('author'))
+  .pre('findById', Populate('author'));
 
 module.exports = mongoose.model('Content', ContentSchema);

@@ -48,6 +48,7 @@ app.get('/', (req, res) => {
 });
 
 require('./controllers/userRoutes.js')(app);
+require('./controllers/contentRoutes.js')(app);
 
 // Start Server
 
