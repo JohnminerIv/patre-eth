@@ -3,7 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const assert = require('assert');
 
-const url = `mongodb://${process.env.ROOTUSER}:${process.env.ROOTPASS}@db:27017/${process.env.DATABASENAME}?authSource=admin`;
+const url = `mongodb://${process.env.ROOTUSER}:${process.env.ROOTPASS}@${process.env.DB}:27017/${process.env.DATABASENAME}?authSource=admin`;
 mongoose.Promise = global.Promise;
 mongoose.connect(
   url,
