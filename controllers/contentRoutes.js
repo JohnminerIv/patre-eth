@@ -1,5 +1,6 @@
 require('cookie-parser');
 const { body, validationResult } = require('express-validator');
+const etherScan = require('etherscan-api').init(process.env.ETHERSCAN);
 const User = require('../models/user');
 const Content = require('../models/content');
 const TxReceipt = require('../models/txReceipt');
@@ -51,6 +52,7 @@ module.exports = (app) => {
   );
   app.get(
     '/content/:id',
+    // eslint-disable-next-line consistent-return
     (req, res) => {
       if (req.user === null) {
         return res.redirect('/');
@@ -63,22 +65,46 @@ module.exports = (app) => {
             return res.render('bruh');
           }
           // eslint-disable-next-line no-underscore-dangle
-          if (req.user._id === content.author._id) {
+          if (req.user._id === String(content.author._id)) {
             return res.render('content', { content });
           }
+          console.log('eft');
           TxReceipt
             .findOne({
-              owner: req.user.id,
+              // eslint-disable-next-line no-underscore-dangle
+              owner: req.user._id,
               forContent: req.params.id,
             })
-            .then((txToken) => {
-              if (txToken === null) {
-                return res.status(401).send({ message: 'Not Authorised' });
+            // eslint-disable-next-line consistent-return
+            .then((foundTxReceipt) => {
+              if (foundTxReceipt === null) {
+                return res.redirect(`/content/${req.params.id}/txreceipt/create`);
               }
-              return res.render('content', { content });
+              if (foundTxReceipt.verified) {
+                return res.render('content', { content });
+              }
+              etherScan.proxy
+                .eth_getTransactionByHash(foundTxReceipt.txHash)
+                // eslint-disable-next-line consistent-return
+                .then((foundTx) => {
+                  if (foundTx.result === null) {
+                    TxReceipt.deleteOne(foundTxReceipt, (err) => {
+                      // eslint-disable-next-line no-console
+                      console.log(err);
+                      return res.render('bruh');
+                    });
+                  } else if (foundTx.result.blockHash === null) {
+                    return res.render('content', { content });
+                  } else {
+                    // eslint-disable-next-line no-param-reassign
+                    foundTxReceipt.verified = true;
+                    foundTxReceipt
+                      .save()
+                      .then(() => res.render('content', { content }));
+                  }
+                });
             });
         });
-      return res.render('user', { user: req.user });
     },
   );
   app.get(

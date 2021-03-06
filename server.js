@@ -47,8 +47,9 @@ app.get('/', (req, res) => {
   res.render('index', { currentUser });
 });
 
-require('./controllers/userRoutes.js')(app);
-require('./controllers/contentRoutes.js')(app);
+require('./controllers/userRoutes')(app);
+require('./controllers/contentRoutes')(app);
+require('./controllers/txReceiptRoutes')(app);
 
 // Start Server
 
