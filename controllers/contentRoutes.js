@@ -19,7 +19,7 @@ module.exports = (app) => {
     '/content/create',
     body('title').isString(),
     body('content').isString(),
-    body('priceInWei').isInt(),
+    body('priceInWei').isString(),
     // eslint-disable-next-line consistent-return
     (req, res) => {
       if (req.user === null) {
@@ -30,6 +30,11 @@ module.exports = (app) => {
         // eslint-disable-next-line no-console
         console.log(errors);
         return res.status(400).render('bruh');
+      }
+      try {
+        req.body.priceInWei = Number(req.body.priceInWei);
+      } catch (error) {
+        return res.status(401).send({ message: 'Bad price input.' });
       }
       // eslint-disable-next-line no-underscore-dangle
       req.body.author = req.user._id;

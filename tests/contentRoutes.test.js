@@ -24,7 +24,7 @@ const user = {
 const content = {
   title: 'Generic Content',
   content: 'Cool content.',
-  priceInWei: 5000000000000000,
+  priceInWei: '5000000000000000',
 };
 
 describe('Content routes', function () {
